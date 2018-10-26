@@ -1,12 +1,10 @@
 package com.example.whiteboardfall2018serverjava.models;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
-    private int id;
+    private int id = User.autoIncrement++;;
     private String title;
     private List<Module> modules = new ArrayList<Module>();
 
