@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowCredentials = "true" , allowedHeaders = "*")
 public class WidgetService {
     @Autowired
     UserService userService;

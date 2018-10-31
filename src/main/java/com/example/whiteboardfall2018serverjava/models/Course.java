@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
-    private int id = User.autoIncrement++;;
+    private int id = User.autoIncrement++;
     private String title;
     private List<Module> modules = new ArrayList<Module>();
 

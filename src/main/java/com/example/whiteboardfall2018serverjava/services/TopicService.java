@@ -7,12 +7,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
+//@CrossOrigin(origins = "*", allowCredentials = "true" , allowedHeaders = "*")
 public class TopicService {
     @Autowired
     UserService userService;
     @Autowired
     LessonService lessonService;
+    @Autowired
+    CourseService courseService;
+
     @GetMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}/topic")
     public List<Topic> findAllTopics(
             @PathVariable("userId") int userId,
@@ -37,14 +40,14 @@ public class TopicService {
     }
 
     @PostMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}/topic")
-    public List<Topic> createTopic(@PathVariable("userId") int userId,
+    public List<Course> createTopic(@PathVariable("userId") int userId,
                                    @PathVariable("courseId") int courseId,
                                    @PathVariable("moduleId") int moduleId,
                                    @PathVariable("lessonId") int lessonId,
                                    @RequestBody Topic topic) {
         Lesson lesson = lessonService.findLessonById(userId, courseId, moduleId, lessonId);
         lesson.getTopics().add(topic);
-        return lesson.getTopics();
+        return courseService.findAllCourses(userId);
     }
 
     @GetMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}/topic/{topicId}")
@@ -63,7 +66,7 @@ public class TopicService {
     }
 
     @DeleteMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}/topic/{topicId}")
-    public List<Topic> deleteTopic(
+    public List<Course> deleteTopic(
             @PathVariable("userId") int userId,
             @PathVariable("courseId") int courseId,
             @PathVariable("moduleId") int moduleId,
@@ -71,11 +74,11 @@ public class TopicService {
             @PathVariable("topicId") int topicId) {
         Lesson lesson = lessonService.findLessonById(userId, courseId, moduleId, lessonId);
         lesson.getTopics().removeIf((Topic topic) -> topic.getId() == topicId);
-        return lesson.getTopics();
+        return courseService.findAllCourses(userId);
     }
 
     @PutMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}/topic/{topicId}")
-    public List<Topic> updateTopic(
+    public List<Course> updateTopic(
             @PathVariable("userId") int userId,
             @PathVariable("courseId") int courseId,
             @PathVariable("moduleId") int moduleId,
@@ -84,6 +87,6 @@ public class TopicService {
             @RequestBody Topic topic) {
         deleteTopic(userId, courseId, moduleId, lessonId, topicId);
         createTopic(userId, courseId, moduleId, lessonId, topic);
-        return findAllTopics(userId, courseId, moduleId, lessonId);
+        return courseService.findAllCourses(userId);
     }
 }

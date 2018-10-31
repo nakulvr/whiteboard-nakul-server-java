@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowCredentials = "true" , allowedHeaders = "*")
 
 public class CourseService {
     @Autowired

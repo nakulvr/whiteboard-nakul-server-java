@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
-
+@CrossOrigin(origins = "*" , allowCredentials = "true" , allowedHeaders = "*")
 public class UserService {
     static List<User> users = new ArrayList<User>();
-    static String[] usernames    = {"alice", "bob", "charlie"};
+    static String[] usernames    = {"alice"};
     static String[] courseTitles = {"cs5200", "cs5610", "cs5500"};
     static String[] moduleTitles = {"Module 1", "Module 2"};
     static String[] lessonTitles = {"lesson 1", "lesson 2"};
@@ -50,20 +49,26 @@ public class UserService {
             if(moduleTitle.equals("Module 1")) {
                 module.setLessons(lessons);
             }
+            else if(moduleTitle.equals("Module 2")) {
+                module.setLessons(lessons);
+            }
             modules.add(module);
         }
 
         List<Course> courses = new ArrayList<Course>();
         for(String courseTitle : courseTitles) {
             Course course = new Course(courseTitle);
-            if(courseTitle.equals("cs5200")) {
+//            if(courseTitle.equals("cs5200")) {
                 course.setModules(modules);
-            }
+//            }
             courses.add(course);
         }
         for(String username: usernames) {
             User user = new User(username);
             if(username.equals("alice")) {
+                user.setPassword("alice");
+                user.setFirstName("Alice");
+                user.setLastName("WonderLand");
                 user.setCourses(courses);
             }
             users.add(user);
@@ -98,13 +103,25 @@ public class UserService {
         return user;
     }
 
-//    TODO: profile to PUT API
-//    @PutMapping
     @GetMapping("/api/profile")
     public User profile(HttpSession session) {
         User currentUser = (User)
                 session.getAttribute("currentUser");
         return currentUser;
+    }
+
+    @PutMapping("/api/profile")
+    public User profileUpdate(@RequestBody User loggedInUser,
+                              HttpSession session) {
+        for(User user : users) {
+            if(user.getUsername().equals(loggedInUser.getUsername())) {
+                user.setPassword(loggedInUser.getPassword());
+                user.setFirstName(loggedInUser.getFirstName());
+                user.setLastName(loggedInUser.getLastName());
+                return user;
+            }
+        }
+        return null;
     }
 
     @PostMapping("/api/logout")
@@ -113,7 +130,7 @@ public class UserService {
         session.invalidate();
     }
     @PostMapping("/api/login")
-    public User login(	@RequestBody User credentials,
+    public User login(@RequestBody User credentials,
                           HttpSession session) {
         for (User user : users) {
             if( user.getUsername().equals(credentials.getUsername())

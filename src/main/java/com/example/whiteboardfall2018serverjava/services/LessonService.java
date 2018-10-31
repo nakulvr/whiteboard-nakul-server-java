@@ -11,13 +11,16 @@ import java.util.Iterator;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
+//@CrossOrigin(origins = "*", allowCredentials = "true" , allowedHeaders = "*")
 public class LessonService {
     @Autowired
     UserService userService;
 
     @Autowired
     ModuleService moduleService;
+
+    @Autowired
+    CourseService courseService;
 
     @GetMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson")
     public List<Lesson> findAllLessons(
@@ -38,14 +41,14 @@ public class LessonService {
     }
 
     @PostMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson")
-    public List<Lesson> createLesson(
+    public List<Course> createLesson(
             @PathVariable("userId") int userId,
             @PathVariable("courseId") int courseId,
             @PathVariable("moduleId") int moduleId,
             @RequestBody Lesson lesson) {
         Module module = moduleService.findModuleById(userId, courseId, moduleId);
         module.getLessons().add(lesson);
-        return module.getLessons();
+        return courseService.findAllCourses(userId);
     }
 
     @GetMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}")
@@ -63,7 +66,7 @@ public class LessonService {
     }
 
     @DeleteMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}")
-    public List<Lesson> deleteLesson(
+    public List<Course> deleteLesson(
             @PathVariable("userId") int userId,
             @PathVariable("courseId") int courseId,
             @PathVariable("moduleId") int moduleId,
@@ -71,11 +74,11 @@ public class LessonService {
         Module module = moduleService.findModuleById(userId, courseId, moduleId);
         module.getLessons().removeIf((Lesson lesson) -> lesson.getId() == lessonId);
 
-        return module.getLessons();
+        return courseService.findAllCourses(userId);
     }
 
     @PutMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}")
-    public List<Lesson> updateLesson(
+    public List<Course> updateLesson(
             @PathVariable("userId") int userId,
             @PathVariable("courseId") int courseId,
             @PathVariable("moduleId") int moduleId,
@@ -83,6 +86,6 @@ public class LessonService {
             @RequestBody Lesson lesson) {
         deleteLesson(userId, courseId, moduleId, lessonId);
         createLesson(userId, courseId, moduleId, lesson);
-        return findAllLessons(userId, courseId, moduleId);
+        return courseService.findAllCourses(userId);
     }
 }
