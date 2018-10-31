@@ -1,12 +1,10 @@
 package com.example.whiteboardfall2018serverjava.services;
 
-import com.example.whiteboardfall2018serverjava.models.Course;
-import com.example.whiteboardfall2018serverjava.models.Lesson;
-import com.example.whiteboardfall2018serverjava.models.Module;
-import com.example.whiteboardfall2018serverjava.models.User;
+import com.example.whiteboardfall2018serverjava.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -73,7 +71,14 @@ public class LessonService {
             @PathVariable("lessonId") int lessonId) {
         Module module = moduleService.findModuleById(userId, courseId, moduleId);
         module.getLessons().removeIf((Lesson lesson) -> lesson.getId() == lessonId);
-
+        if(module.getLessons().size() == 0){
+            Lesson lesson = new Lesson("New Lesson");
+            List<Topic> topics = new ArrayList<>();
+            Topic topic = new Topic("New Topic");
+            topics.add(topic);
+            lesson.setTopics(topics);
+            createLesson(userId, courseId, moduleId, lesson);
+        }
         return courseService.findAllCourses(userId);
     }
 
@@ -84,8 +89,11 @@ public class LessonService {
             @PathVariable("moduleId") int moduleId,
             @PathVariable("lessonId") int lessonId,
             @RequestBody Lesson lesson) {
-        deleteLesson(userId, courseId, moduleId, lessonId);
-        createLesson(userId, courseId, moduleId, lesson);
+//        deleteLesson(userId, courseId, moduleId, lessonId);
+//        createLesson(userId, courseId, moduleId, lesson);
+        Lesson lessonToEdit = findLessonById(userId, courseId, moduleId, lessonId);
+        lessonToEdit.setTopics(lesson.getTopics());
+        lessonToEdit.setTitle(lesson.getTitle());
         return courseService.findAllCourses(userId);
     }
 }

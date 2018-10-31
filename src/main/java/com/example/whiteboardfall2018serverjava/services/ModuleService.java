@@ -71,8 +71,11 @@ public class ModuleService {
             @PathVariable("courseId") int courseId,
             @PathVariable("moduleId") int moduleId,
             @RequestBody Module module) {
-            deleteModule(userId, courseId, moduleId);
-            createModule(userId, courseId, module);
+//            deleteModule(userId, courseId, moduleId);
+//            createModule(userId, courseId, module);
+        Module moduleToEdit = findModuleById(userId, courseId, moduleId);
+        moduleToEdit.setLessons(module.getLessons());
+        moduleToEdit.setTitle(module.getTitle());
         return courseService.findAllCourses(userId);
     }
 }

@@ -85,8 +85,11 @@ public class TopicService {
             @PathVariable("lessonId") int lessonId,
             @PathVariable("topicId") int topicId,
             @RequestBody Topic topic) {
-        deleteTopic(userId, courseId, moduleId, lessonId, topicId);
-        createTopic(userId, courseId, moduleId, lessonId, topic);
+//        deleteTopic(userId, courseId, moduleId, lessonId, topicId);
+//        createTopic(userId, courseId, moduleId, lessonId, topic);
+        Topic topicToEdit = findTopicById(userId, courseId, moduleId, lessonId, topicId);
+        topicToEdit.setWidgets(topic.getWidgets());
+        topicToEdit.setTitle(topic.getTitle());
         return courseService.findAllCourses(userId);
     }
 }
