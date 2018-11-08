@@ -1,6 +1,8 @@
 package com.example.whiteboardfall2018serverjava.services;
 
 import com.example.whiteboardfall2018serverjava.models.*;
+import com.example.whiteboardfall2018serverjava.repositories.TopicRepository;
+import com.example.whiteboardfall2018serverjava.repositories.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,18 @@ import java.util.List;
 public class WidgetService {
     @Autowired
     UserService userService;
+
+    @Autowired
+    WidgetRepository wr;
+
+    @Autowired
+    TopicRepository tr;
+
+    @GetMapping("/api/widget")
+    public List<Widget> findAllWidgets() {
+        return (List<Widget>) wr.findAll();
+    }
+
     @GetMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}/topic/{topicId}/widget")
     public List<Widget> findTopicsForTopicId(
             @PathVariable("userId") int userId,

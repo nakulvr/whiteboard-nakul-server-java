@@ -1,11 +1,16 @@
 package com.example.whiteboardfall2018serverjava.models;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Topic {
-    private int id = User.autoIncrement++;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String title;
+    @OneToMany(mappedBy = "topic")
     private List<Widget> widgets = new ArrayList<Widget>();
 
     public Topic(String title) {

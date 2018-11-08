@@ -1,11 +1,13 @@
 package com.example.whiteboardfall2018serverjava.services;
 
 import com.example.whiteboardfall2018serverjava.models.*;
+import com.example.whiteboardfall2018serverjava.repositories.TopicRepository;
+import com.example.whiteboardfall2018serverjava.repositories.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+//TODO
 @RestController
 //@CrossOrigin(origins = "*", allowCredentials = "true" , allowedHeaders = "*")
 public class TopicService {
@@ -15,6 +17,17 @@ public class TopicService {
     LessonService lessonService;
     @Autowired
     CourseService courseService;
+
+    @Autowired
+    TopicRepository tr;
+
+    @Autowired
+    WidgetRepository wr;
+
+    @GetMapping("/api/topic")
+    public List<Topic> findallTopics(){
+        return (List<Topic>) tr.findAll();
+    }
 
     @GetMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}/topic")
     public List<Topic> findAllTopics(
@@ -91,5 +104,22 @@ public class TopicService {
         topicToEdit.setWidgets(topic.getWidgets());
         topicToEdit.setTitle(topic.getTitle());
         return courseService.findAllCourses(userId);
+    }
+
+    @GetMapping("/api/topic/{topicId}/widget")
+    public List<Widget> findWidgetForTopic(
+            @PathVariable("topicId") int topicId) {
+        return tr.findById(topicId).get().getWidgets();
+    }
+
+    @PostMapping("/api/topic/{topicId}/widget")
+    public List<Widget> createWidget(
+            @PathVariable("topicId") int topicId,
+            @RequestBody Widget widget) {
+        Topic topic = tr.findById(topicId).get();
+        widget.setTopic(topic);
+        widget.setWidgetType("HEADING");
+        wr.save(widget);
+        return tr.findById(topicId).get().getWidgets();
     }
 }
