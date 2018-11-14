@@ -1,13 +1,11 @@
 package com.example.whiteboardfall2018serverjava.services;
 
 import com.example.whiteboardfall2018serverjava.models.*;
+import com.example.whiteboardfall2018serverjava.repositories.ListWidgetRepository;
 import com.example.whiteboardfall2018serverjava.repositories.TopicRepository;
 import com.example.whiteboardfall2018serverjava.repositories.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,13 +17,52 @@ public class WidgetService {
 
     @Autowired
     WidgetRepository wr;
-
     @Autowired
     TopicRepository tr;
+    @Autowired
+    ListWidgetRepository lr;
+
+    public void updateWidgetRepo(Widget widget) {
+        wr.deleteById(widget.getId());
+        if(widget.getWidgetType().equals("LIST")) {
+            ListWidget listWidget = new ListWidget();
+            listWidget.setWidgetType(widget.getWidgetType());
+            listWidget.setTopic(widget.getTopic());
+            listWidget.setTitle(widget.getTitle());
+            lr.save(listWidget);
+        }
+        else
+            wr.save(widget);
+    }
 
     @GetMapping("/api/widget")
     public List<Widget> findAllWidgets() {
         return (List<Widget>) wr.findAll();
+    }
+
+    @GetMapping("/api/widget/{widgetId}")
+    public Widget findWidgetById(
+            @PathVariable("widgetId") int widgetId) {
+        return wr.findById(widgetId).get();
+    }
+
+    @DeleteMapping("/api/widget/{widgetId}")
+    public List<Widget> deleteWidget(
+            @PathVariable("widgetId") int widgetId) {
+        wr.deleteById(widgetId);
+        return findAllWidgets();
+    }
+
+    @PutMapping("/api/widget/{widgetId}")
+    public List<Widget> updateWidget(
+            @PathVariable("widgetId") int widgetId,
+            @RequestBody Widget widget) {
+        Widget widgetToUpdate = findWidgetById(widgetId);
+        widgetToUpdate.setWidgetType(widget.getWidgetType());
+//        widgetToUpdate.setTopic(widget.getTopic());
+        widgetToUpdate.setTitle(widget.getTitle());
+        wr.save(widgetToUpdate);
+        return findAllWidgets();
     }
 
     @GetMapping("/api/user/{userId}/course/{courseId}/module/{moduleId}/lesson/{lessonId}/topic/{topicId}/widget")

@@ -1,8 +1,10 @@
 package com.example.whiteboardfall2018serverjava.models;
 
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
+//@Entity
 public class User {
     private String username, password, firstName, lastName;
     public static int autoIncrement = 0;
