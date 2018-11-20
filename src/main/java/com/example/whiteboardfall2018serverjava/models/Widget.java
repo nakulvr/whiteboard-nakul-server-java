@@ -11,14 +11,14 @@ public class Widget {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
-    private String widgetType;
+    private String type;
 
-    public String getWidgetType() {
-        return widgetType;
+    public String getType() {
+        return type;
     }
 
-    public void setWidgetType(String widgetType) {
-        this.widgetType = widgetType;
+    public void setType(String type) {
+        this.type = type;
     }
 
     @ManyToOne

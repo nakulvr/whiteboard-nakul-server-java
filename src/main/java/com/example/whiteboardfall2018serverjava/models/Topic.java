@@ -17,6 +17,13 @@ public class Topic {
         this.title = title;
     }
 
+    public Topic(int id) {
+        this.id = id;
+    }
+    public Topic(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
     public Topic() {
     }
 

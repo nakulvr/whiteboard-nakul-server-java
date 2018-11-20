@@ -4,13 +4,13 @@ import javax.persistence.Entity;
 
 @Entity
 public class LinkWidget extends Widget{
-    private String linkTitle;
+    private String href;
 
-    public String getLinkTitle() {
-        return linkTitle;
+    public String getHref() {
+        return href;
     }
 
-    public void setLinkTitle(String linkTitle) {
-        this.linkTitle = linkTitle;
+    public void setHref(String href) {
+        this.href = href;
     }
 }

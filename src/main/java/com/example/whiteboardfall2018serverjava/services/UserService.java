@@ -16,7 +16,7 @@ public class UserService {
     static String[] courseTitles = {"cs5200", "cs5610", "cs5500"};
     static String[] moduleTitles = {"Module 1", "Module 2"};
     static String[] lessonTitles = {"lesson 1", "lesson 2"};
-    static String[] topicTitles = {"topic 1", "topic 2"};
+    static String[] topicTitles = {"topic 1"};
     static String[] widgetTitles = {"widget 1", "widget 2"};
 
     {
@@ -28,6 +28,7 @@ public class UserService {
         List<Topic> topics = new ArrayList<Topic>();
         for(String topicTitle: topicTitles) {
             Topic topic = new Topic(topicTitle);
+            topic.setId(topic.getId() + 1);
             if(topicTitle.equals("topic 1")) {
                 topic.setWidgets(widgets);
             }
@@ -37,9 +38,9 @@ public class UserService {
         List<Lesson> lessons = new ArrayList<Lesson>();
         for(String lessonTitle : lessonTitles) {
             Lesson lesson = new Lesson(lessonTitle);
-            if(lessonTitle.equals("lesson 1")) {
+//            if(lessonTitle.equals("lesson 1")) {
                 lesson.setTopics(topics);
-            }
+//            }
             lessons.add(lesson);
         }
 

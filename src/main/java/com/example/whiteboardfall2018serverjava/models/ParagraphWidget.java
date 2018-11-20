@@ -4,13 +4,13 @@ import javax.persistence.Entity;
 
 @Entity
 public class ParagraphWidget extends Widget{
-    private String paragraphText;
+    private String text;
 
-    public String getParagraphText() {
-        return paragraphText;
+    public String getText() {
+        return text;
     }
 
-    public void setParagraphText(String paragraphText) {
-        this.paragraphText = paragraphText;
+    public void setText(String text) {
+        this.text = text;
     }
 }

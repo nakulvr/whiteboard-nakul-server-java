@@ -1,10 +1,8 @@
 package com.example.whiteboardfall2018serverjava.services;
 
-import com.example.whiteboardfall2018serverjava.models.HeadingWidget;
 import com.example.whiteboardfall2018serverjava.models.ImageWidget;
 import com.example.whiteboardfall2018serverjava.models.Topic;
 import com.example.whiteboardfall2018serverjava.models.Widget;
-import com.example.whiteboardfall2018serverjava.repositories.HeadingWidgetRepository;
 import com.example.whiteboardfall2018serverjava.repositories.ImageWidgetRepository;
 import com.example.whiteboardfall2018serverjava.repositories.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +27,7 @@ public class ImageWidgetService {
     public List<Widget> createImageWidget(
             @PathVariable("topicId") int topicId,
             @RequestBody ImageWidget imageWidget) {
-        imageWidget.setWidgetType("IMAGE");
+        imageWidget.setType("IMAGE");
         Topic topic = tr.findById(topicId).get();
         imageWidget.setTopic(topic);
         ir.save(imageWidget);
@@ -40,14 +38,14 @@ public class ImageWidgetService {
     public List<Widget> findAllImageWidget(
             @PathVariable("topicId") int topicId){
         return tr.findById(topicId).get().getWidgets().stream()
-                .filter(w -> w.getWidgetType().equals("IMAGE")).collect(Collectors.toList());
+                .filter(w -> w.getType().equals("IMAGE")).collect(Collectors.toList());
     }
 
     @GetMapping("/api/topic/{topicId}/image/widget/{widgetId}")
     public Widget findImageWidgetById(
             @PathVariable("topicId") int topicId,
             @PathVariable("widgetId") int widgetId) {
-//        tr.findById(topicId).get().getWidgets().stream().filter(w -> w.getWidgetType().equals("LIST")).collect(Collectors.toList());
+//        tr.findById(topicId).get().getWidgets().stream().filter(w -> w.getType().equals("LIST")).collect(Collectors.toList());
         return tr.findById(topicId).get().getWidgets()
                 .stream().filter(w -> w.getId() == widgetId).findAny().orElse(null);
     }
@@ -55,13 +53,18 @@ public class ImageWidgetService {
     public List<Widget> updateImageWidget(
             @PathVariable("topicId") int topicId,
             @PathVariable("widgetId") int widgetId,
-            @RequestBody Widget widget){
-        Widget widgetToUpdate = findImageWidgetById(topicId, widgetId);
-        widgetToUpdate.setTitle(widget.getTitle());
-        widgetToUpdate.setWidgetType(widget.getWidgetType());
-        widgetService.updateWidgetRepo(widgetToUpdate);
+            @RequestBody ImageWidget imageWidget){
+
+//        Widget widgetToUpdate = findImageWidgetById(topicId, widgetId);
+//        widgetToUpdate.setTitle(widget.getTitle());
+//        widgetToUpdate.setType(widget.getType());
+//        widgetService.updateWidgetRepo(widgetToUpdate, widget);
+        ImageWidget imageWidgetToUpdate = ir.findById(widgetId).get();
+        imageWidgetToUpdate.setSrc(imageWidget.getSrc());
+        imageWidgetToUpdate.setTitle(imageWidget.getTitle());
         return topicService.findWidgetForTopic(topicId);
     }
+
 
     @DeleteMapping("/api/topic/{topicId}/image/widget/{widgetId}")
     public List<Widget> deleteImageWidget(

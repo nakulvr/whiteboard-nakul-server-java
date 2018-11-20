@@ -28,7 +28,7 @@ public class ListWidgetService {
     public List<Widget> createListWidget(
             @PathVariable("topicId") int topicId,
             @RequestBody ListWidget listWidget) {
-        listWidget.setWidgetType("LIST");
+        listWidget.setType("LIST");
         Topic topic = tr.findById(topicId).get();
         listWidget.setTopic(topic);
         listWidget = listWidgetRepository.save(listWidget);
@@ -39,14 +39,14 @@ public class ListWidgetService {
     public List<Widget> findAllListWidget(
             @PathVariable("topicId") int topicId){
         return tr.findById(topicId).get().getWidgets().stream()
-                .filter(w -> w.getWidgetType().equals("LIST")).collect(Collectors.toList());
+                .filter(w -> w.getType().equals("LIST")).collect(Collectors.toList());
     }
 
     @GetMapping("/api/topic/{topicId}/list/widget/{widgetId}")
     public Widget findListWidgetById(
             @PathVariable("topicId") int topicId,
             @PathVariable("widgetId") int widgetId) {
-//        tr.findById(topicId).get().getWidgets().stream().filter(w -> w.getWidgetType().equals("LIST")).collect(Collectors.toList());
+//        tr.findById(topicId).get().getWidgets().stream().filter(w -> w.getType().equals("LIST")).collect(Collectors.toList());
         return tr.findById(topicId).get().getWidgets()
                 .stream().filter(w -> w.getId() == widgetId).findAny().orElse(null);
     }
@@ -54,11 +54,14 @@ public class ListWidgetService {
     public List<Widget> updateListWidget(
             @PathVariable("topicId") int topicId,
             @PathVariable("widgetId") int widgetId,
-            @RequestBody Widget widget){
-        Widget widgetToUpdate = findListWidgetById(topicId, widgetId);
-        widgetToUpdate.setTitle(widget.getTitle());
-        widgetToUpdate.setWidgetType(widget.getWidgetType());
-        widgetService.updateWidgetRepo(widgetToUpdate);
+            @RequestBody ListWidget listWidget){
+//        Widget widgetToUpdate = findListWidgetById(topicId, widgetId);
+//        widgetToUpdate.setTitle(widget.getTitle());
+//        widgetToUpdate.setType(widget.getType());
+//        widgetService.updateWidgetRepo(widgetToUpdate, widget);
+        ListWidget listWidgetToUpdate = listWidgetRepository.findById(widgetId).get();
+        listWidgetToUpdate.setItems(listWidget.getItems());
+        listWidgetToUpdate.setTitle(listWidget.getTitle());
         return topicService.findWidgetForTopic(topicId);
     }
 

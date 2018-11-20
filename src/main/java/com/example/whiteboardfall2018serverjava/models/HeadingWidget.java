@@ -4,13 +4,23 @@ import javax.persistence.Entity;
 
 @Entity
 public class HeadingWidget extends Widget{
-    private String headingTitle;
+    private String size;
+    private String text;
 
-    public String getHeadingTitle() {
-        return headingTitle;
+    public String getText() {
+        return text;
     }
 
-    public void setHeadingTitle(String headingTitle) {
-        this.headingTitle = headingTitle;
+    public void setText(String text) {
+        this.text = text;
     }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
 }

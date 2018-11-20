@@ -1,6 +1,7 @@
 package com.example.whiteboardfall2018serverjava.services;
 
 import com.example.whiteboardfall2018serverjava.models.*;
+import com.example.whiteboardfall2018serverjava.repositories.HeadingWidgetRepository;
 import com.example.whiteboardfall2018serverjava.repositories.TopicRepository;
 import com.example.whiteboardfall2018serverjava.repositories.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,8 @@ public class TopicService {
     LessonService lessonService;
     @Autowired
     CourseService courseService;
-
+    @Autowired
+    HeadingWidgetRepository hr;
     @Autowired
     TopicRepository tr;
 
@@ -118,8 +120,15 @@ public class TopicService {
             @RequestBody Widget widget) {
         Topic topic = tr.findById(topicId).get();
         widget.setTopic(topic);
-        widget.setWidgetType("HEADING");
-        wr.save(widget);
+        widget.setType("HEADING");
+        HeadingWidget headingWidget = new HeadingWidget();
+        headingWidget.setTitle(widget.getTitle());
+        headingWidget.setSize("1");
+        headingWidget.setText("Heading");
+        headingWidget.setTopic(widget.getTopic());
+        headingWidget.setType(widget.getType());
+        hr.save(headingWidget);
+//        wr.save(widget);
         return tr.findById(topicId).get().getWidgets();
     }
 }

@@ -1,9 +1,7 @@
 package com.example.whiteboardfall2018serverjava.services;
 
 import com.example.whiteboardfall2018serverjava.models.*;
-import com.example.whiteboardfall2018serverjava.repositories.ListWidgetRepository;
-import com.example.whiteboardfall2018serverjava.repositories.TopicRepository;
-import com.example.whiteboardfall2018serverjava.repositories.WidgetRepository;
+import com.example.whiteboardfall2018serverjava.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,20 +18,15 @@ public class WidgetService {
     @Autowired
     TopicRepository tr;
     @Autowired
-    ListWidgetRepository lr;
-
-    public void updateWidgetRepo(Widget widget) {
-        wr.deleteById(widget.getId());
-        if(widget.getWidgetType().equals("LIST")) {
-            ListWidget listWidget = new ListWidget();
-            listWidget.setWidgetType(widget.getWidgetType());
-            listWidget.setTopic(widget.getTopic());
-            listWidget.setTitle(widget.getTitle());
-            lr.save(listWidget);
-        }
-        else
-            wr.save(widget);
-    }
+    ListWidgetRepository listWidgetRepository;
+    @Autowired
+    ImageWidgetRepository ir;
+    @Autowired
+    LinkWidgetRepository lr;
+    @Autowired
+    ParagraphWidgetRepository pr;
+    @Autowired
+    HeadingWidgetRepository hr;
 
     @GetMapping("/api/widget")
     public List<Widget> findAllWidgets() {
@@ -53,15 +46,65 @@ public class WidgetService {
         return findAllWidgets();
     }
 
-    @PutMapping("/api/widget/{widgetId}")
-    public List<Widget> updateWidget(
+//    @PutMapping("/api/widget/{widgetId}")
+//    public List<Widget> updateWidget(
+//            @PathVariable("widgetId") int widgetId,
+//            @RequestBody Widget widget) {
+//        Widget widgetToUpdate = findWidgetById(widgetId);
+//        widgetToUpdate.setType(widget.getType());
+////        widgetToUpdate.setTopic(widget.getTopic());
+//        widgetToUpdate.setTitle(widget.getTitle());
+//        wr.save(widgetToUpdate);
+//        return findAllWidgets();
+//    }
+
+    @PutMapping("/api/topic/{topicId}/widget/{widgetId}")
+    public List<Widget> updateWidgetRepo(
+            @PathVariable("topicId") int topicId,
             @PathVariable("widgetId") int widgetId,
             @RequestBody Widget widget) {
-        Widget widgetToUpdate = findWidgetById(widgetId);
-        widgetToUpdate.setWidgetType(widget.getWidgetType());
-//        widgetToUpdate.setTopic(widget.getTopic());
-        widgetToUpdate.setTitle(widget.getTitle());
-        wr.save(widgetToUpdate);
+        wr.deleteById(widgetId);
+        if(widget.getType().equals("LIST")) {
+            ListWidget listWidget = new ListWidget();
+            listWidget.setType(widget.getType());
+//            widget.getTopic().setId(topicId);
+            listWidget.setTopic(tr.findById(topicId).get());
+            listWidget.setTitle(widget.getTitle());
+            listWidgetRepository.save(listWidget);
+        }
+        else if(widget.getType().equals("IMAGE")) {
+//            System.out.println(widget.getClass().getName());
+            ImageWidget imageWidget = new ImageWidget();
+            imageWidget.setType(widget.getType());
+//            widget.getTopic().setId(topicId);
+            imageWidget.setTopic(tr.findById(topicId).get());
+            imageWidget.setTitle(widget.getTitle());
+            ir.save(imageWidget);
+        }
+        else if(widget.getType().equals("LINK")){
+            LinkWidget linkWidget = new LinkWidget();
+            linkWidget.setType(widget.getType());
+//            widget.getTopic().setId(topicId);
+            linkWidget.setTopic(tr.findById(topicId).get());
+            linkWidget.setTitle(widget.getTitle());
+            lr.save(linkWidget);
+        }
+        else if(widget.getType().equals("PARAGRAPH")) {
+            ParagraphWidget paragraphWidget = new ParagraphWidget();
+            paragraphWidget.setType(widget.getType());
+//            widget.getTopic().setId(topicId);
+            paragraphWidget.setTopic(tr.findById(topicId).get());
+            paragraphWidget.setTitle(widget.getTitle());
+            pr.save(paragraphWidget);
+        }
+        else {
+            HeadingWidget headingWidget = new HeadingWidget();
+            headingWidget.setType(widget.getType());
+//            widget.getTopic().setId(topicId);
+            headingWidget.setTopic(tr.findById(topicId).get());
+            headingWidget.setTitle(widget.getTitle());
+            hr.save(headingWidget);
+        }
         return findAllWidgets();
     }
 
