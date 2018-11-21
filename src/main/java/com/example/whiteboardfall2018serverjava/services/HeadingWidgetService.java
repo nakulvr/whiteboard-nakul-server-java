@@ -63,6 +63,7 @@ public class HeadingWidgetService {
 //        widgetToUpdate.setTitle(headingWidget.getTitle());
 //        widgetToUpdate.setType(headingWidget.getType());
 //        widgetService.updateWidgetRepo(widgetToUpdate, widget);
+        hr.save(headingWidgetToUpdate);
         return topicService.findWidgetForTopic(topicId);
     }
 

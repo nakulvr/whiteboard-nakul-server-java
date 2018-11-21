@@ -61,6 +61,7 @@ public class LinkWidgetService {
         LinkWidget linkWidgetToUpdate = lr.findById(widgetId).get();
         linkWidgetToUpdate.setHref(linkWidget.getHref());
         linkWidgetToUpdate.setTitle(linkWidget.getTitle());
+        lr.save(linkWidgetToUpdate);
         return topicService.findWidgetForTopic(topicId);
     }
 

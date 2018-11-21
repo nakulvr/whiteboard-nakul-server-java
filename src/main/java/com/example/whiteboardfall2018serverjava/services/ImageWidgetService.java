@@ -62,6 +62,7 @@ public class ImageWidgetService {
         ImageWidget imageWidgetToUpdate = ir.findById(widgetId).get();
         imageWidgetToUpdate.setSrc(imageWidget.getSrc());
         imageWidgetToUpdate.setTitle(imageWidget.getTitle());
+        ir.save(imageWidgetToUpdate);
         return topicService.findWidgetForTopic(topicId);
     }
 

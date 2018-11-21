@@ -61,6 +61,7 @@ public class ParagraphWidgetService {
         ParagraphWidget paragraphWidgetToUpdate = pr.findById(widgetId).get();
         paragraphWidgetToUpdate.setText(paragraphWidget.getText());
         paragraphWidgetToUpdate.setTitle(paragraphWidget.getTitle());
+        pr.save(paragraphWidgetToUpdate);
         return topicService.findWidgetForTopic(topicId);
     }
 

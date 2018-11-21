@@ -62,6 +62,8 @@ public class ListWidgetService {
         ListWidget listWidgetToUpdate = listWidgetRepository.findById(widgetId).get();
         listWidgetToUpdate.setItems(listWidget.getItems());
         listWidgetToUpdate.setTitle(listWidget.getTitle());
+        listWidgetToUpdate.setOrdered(listWidget.getOrdered());
+        listWidgetRepository.save(listWidgetToUpdate);
         return topicService.findWidgetForTopic(topicId);
     }
 
