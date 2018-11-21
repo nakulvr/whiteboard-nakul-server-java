@@ -39,6 +39,10 @@ public class Widget {
     public Widget(String title) {
         this.title = title;
     }
+    public Widget(String title, int id){
+        this.title = title;
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

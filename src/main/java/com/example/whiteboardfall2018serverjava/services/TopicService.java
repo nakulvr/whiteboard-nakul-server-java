@@ -61,6 +61,8 @@ public class TopicService {
                                    @PathVariable("lessonId") int lessonId,
                                    @RequestBody Topic topic) {
         Lesson lesson = lessonService.findLessonById(userId, courseId, moduleId, lessonId);
+        tr.save(topic);
+        topic.setId(1);
         lesson.getTopics().add(topic);
         return courseService.findAllCourses(userId);
     }
