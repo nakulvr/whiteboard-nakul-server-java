@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
 @CrossOrigin(origins = "*" , allowCredentials = "true" , allowedHeaders = "*")
@@ -23,7 +23,7 @@ public class UserService {
     {
         List<Widget> widgets = new ArrayList<Widget>();
         for (String widgetTitle : widgetTitles) {
-            widgets.add(new Widget(widgetTitle, new Random().nextInt()));
+            widgets.add(new Widget(widgetTitle, ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE)));
         }
 
         List<Topic> topics = new ArrayList<Topic>();
